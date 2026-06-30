@@ -6,6 +6,18 @@
     <title>CanvasSync - Design System Palette & Font Generator</title>
     <!-- Tailwind CSS for high-fidelity styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind configurations to adjust the 'lg' breakpoint to 1230px
+        tailwind.config = {
+            theme: {
+                extend: {
+                    screens: {
+                        'lg': '1230px',
+                    }
+                }
+            }
+        }
+    </script>
     <!-- FontAwesome Icons for beautiful developer workspace interface -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -666,14 +678,14 @@
                         <span class="text-md font-extrabold text-white" id="previewMetric2">$0.45</span>
                         <span class="text-[9px] text-red-400 block mt-0.5"><i class="fa-solid fa-arrow-down mr-0.5"></i> 3.8%</span>
                     </div>
-                    <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                    <div class="p-3 rounded-lg bg-[#111319] border border-slate-800">
                         <span class="text-[9px] font-bold text-slate-500 block">BOUNCE RATE</span>
                         <span class="text-md font-extrabold text-white" id="previewMetric3">24.1%</span>
                         <span class="text-[9px] text-slate-400 block mt-0.5">Stable</span>
                     </div>
                 </div>
 
-                <div class="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-3">
+                <div class="p-4 rounded-lg bg-[#111319] border border-slate-800 space-y-3">
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Visual Design Assessment</span>
                     <p id="previewVibeBody" class="text-[11px] text-slate-400 leading-relaxed italic">
                         The visual palette harmony balances high-contrast interactive links against smooth content frames. Update variables using spacebar synchronization.
@@ -785,10 +797,10 @@
             link.href = `https://fonts.googleapis.com/css2?family=${hUrl}:wght@400;700;800;900&family=${bUrl}:wght@300;400;500;600&display=swap`;
         }
 
-        // Initialize responsive drawer class configuration (Adapts on screen dimensions < 1024px)
+        // Initialize responsive drawer class configuration (Adapts on screen dimensions < 1230px)
         function initializeSidebarResponsiveness() {
             const sidebar = document.getElementById('sidebarPanel');
-            if (window.innerWidth < 1024) {
+            if (window.innerWidth < 1230) {
                 sidebar.classList.add('-translate-x-full');
                 sidebar.classList.remove('translate-x-0');
                 document.getElementById('sidebarToggleText').innerText = "Open Sidebar";
@@ -874,6 +886,7 @@
             return false;
         }
 
+        // Drop ends
         function handleDragEnd(e) {
             this.style.opacity = '1';
             this.style.transform = 'none';
@@ -964,11 +977,11 @@
                 showToast("Copied quick tokens!");
             });
             
-            // Adjust drawer state automatically when screen resizes to avoid lock-outs
+            // Adjust drawer state automatically when screen resizes to avoid lock-outs (Updated to 1230px)
             window.addEventListener('resize', function() {
                 const sidebar = document.getElementById('sidebarPanel');
                 const scrim = document.getElementById('sidebarScrim');
-                if (window.innerWidth >= 1024) {
+                if (window.innerWidth >= 1230) {
                     sidebar.classList.remove('-translate-x-full');
                     sidebar.classList.add('translate-x-0');
                     if(scrim) scrim.classList.add('hidden');
@@ -1443,7 +1456,7 @@
                 // Open Sidebar
                 sidebar.classList.remove('-translate-x-full', 'hidden');
                 sidebar.classList.add('translate-x-0', 'fixed');
-                if (window.innerWidth < 1024) {
+                if (window.innerWidth < 1230) {
                     scrim.classList.remove('hidden');
                     scrim.classList.add('opacity-100');
                 }
@@ -1677,6 +1690,7 @@
             showToast(`Copied ${val} to clipboard!`);
         }
 
+        // Copy logic
         function copyTextToClipboard(text) {
             // Robust iframe-safe copy implementation using legacy fallback as requested
             const textArea = document.createElement("textarea");
