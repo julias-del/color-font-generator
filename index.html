@@ -1,96 +1,632 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aesthetic Studio</title>
-
-  <!-- App UI fonts only -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg">
-
-  <link rel="stylesheet" href="./css/styles.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanvasSync - Design System Palette & Font Generator</title>
+    <!-- Tailwind CSS for high-fidelity styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons for beautiful developer workspace interface -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
+<body class="min-h-screen flex flex-col font-sans select-none">
 
-<body>
-  <header class="topbar">
-    <div class="brand">
-      <h1>Aesthetic Studio</h1>
-      <div class="shortcuts" id="shortcutsBar">
-        <span><kbd>Space</kbd> Shuffle</span>
-        <span><kbd>S</kbd> Save</span>
-        <span><kbd>C</kbd> Copy CSS</span>
-        <span><kbd>L</kbd> Lock</span>
-      </div>
+    <!-- TOP NAV / GLOBAL ACTION BAR -->
+    <header class="h-16 border-b border-gray-800 bg-[#0f1115] px-4 lg:px-6 flex items-center justify-between z-30 shrink-0">
+        <!-- Logo -->
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/10">
+                <i class="fa-solid fa-wand-magic-sparkles text-white text-sm"></i>
+            </div>
+            <div>
+                <span class="font-bold text-white tracking-wide text-md">CanvasSync</span>
+                <span class="text-[10px] block text-indigo-400 font-semibold tracking-wider uppercase -mt-1">Color & Font Generator</span>
+            </div>
+        </div>
+
+        <!-- Central Keyboard Shortcut Hint -->
+        <div class="hidden md:flex items-center justify-center">
+            <div class="text-xs text-gray-400 bg-gray-900/50 px-3 py-1.5 rounded-full border border-gray-800 flex items-center gap-1.5">
+                <kbd class="px-1.5 py-0.5 bg-gray-800 text-[10px] text-gray-300 rounded border border-gray-700 font-mono shadow-sm">SPACEBAR</kbd>
+                <span>to cycle random palette & font pairings</span>
+            </div>
+        </div>
+
+        <!-- Right Side Controls & Actions -->
+        <div class="flex items-center space-x-2">
+            <!-- Custom UI controls -->
+            <button id="btnOpenAiAssistant" class="px-3.5 py-1.5 rounded-lg border border-indigo-500/30 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 hover:text-indigo-300 text-xs font-medium flex items-center gap-2 transition-all">
+                <i class="fa-solid fa-sparkles text-indigo-400"></i>
+                <span id="sidebarToggleText">Close Sidebar</span>
+            </button>
+            <button id="btnShowPreview" class="px-3.5 py-1.5 rounded-lg border border-gray-800 bg-gray-900/60 hover:bg-gray-800 text-gray-300 hover:text-white text-xs font-medium flex items-center gap-2 transition-all">
+                <i class="fa-solid fa-desktop"></i>
+                <span class="hidden sm:inline">Mockup View</span>
+            </button>
+            <button id="btnExport" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/20 flex items-center gap-1.5 transition-all">
+                <i class="fa-solid fa-download"></i>
+                <span>Export</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE SEED CONTROL BAR -->
+    <div class="flex md:hidden bg-[#0f1115] border-b border-gray-800 p-2.5 space-x-2 overflow-x-auto shrink-0">
+        <div class="flex items-center bg-[#171a21] border border-gray-800 rounded-lg p-1 space-x-2 flex-1 min-w-[310px]">
+            <div class="relative w-6 h-6 rounded overflow-hidden border border-gray-700">
+                <input type="color" id="seedColorPickerMobile" value="#6366F1" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                <div id="seedColorIndicatorMobile" class="w-full h-full bg-[#6366F1]"></div>
+            </div>
+            <input type="text" id="seedColorInputMobile" placeholder="#6366F1" value="#6366F1" class="w-16 bg-transparent text-xs text-gray-200 outline-none uppercase font-mono">
+            <span class="text-gray-600">|</span>
+            <select id="harmonyModeMobile" class="bg-transparent text-[11px] text-gray-300 outline-none flex-1 font-medium">
+                <option value="analogous">Analogous (Neighbor Shades)</option>
+                <option value="complementary">Complementary (High Contrast)</option>
+                <option value="triadic">Triadic (Vibrant Triangle)</option>
+                <option value="monochromatic">Monochromatic (Single Hue)</option>
+            </select>
+            <button id="btnApplySeedMobile" class="px-2 py-0.5 rounded bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-semibold">Apply</button>
+        </div>
+        <button id="btnRandomizeMobile" class="px-3 bg-gray-900 border border-gray-800 hover:bg-gray-800 text-white text-xs rounded-lg whitespace-nowrap"><i class="fa-solid fa-arrows-rotate mr-1"></i> Randomize</button>
     </div>
 
-    <div class="actions">
-      <button id="shuffleBtn">Shuffle</button>
-      <button id="saveBtn">Save</button>
-      <button id="copyBtn">Copy CSS</button>
-      <button id="themeBtn">Theme</button>
+    <!-- MAIN WORKSPACE CONTAINER -->
+    <div class="flex-1 flex flex-col md:flex-row relative overflow-hidden">
+        
+        <!-- SIDEBAR - AI BRAND BUILDER & MANUAL CONTROLLER -->
+        <aside id="sidebarPanel" class="flex flex-col w-80 bg-[#0f1115] border-r border-gray-800 overflow-y-auto shrink-0 z-20">
+            <!-- Sidebar Navigation/Header -->
+            <div class="p-4 border-b border-gray-800 flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group text-indigo-400"></i>
+                    Creative Toolkit
+                </span>
+                <span id="activeHarmonyPill" class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full border border-indigo-500/30 capitalize">Analogous</span>
+            </div>
+
+            <!-- Main Color Seed Control Section -->
+            <div class="p-5 border-b border-gray-800 space-y-4 bg-indigo-500/5">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-palette text-indigo-400"></i> Main Color
+                    </span>
+                    <span class="text-[9px] text-indigo-300 bg-indigo-950 px-1.5 py-0.5 rounded border border-indigo-800 font-mono font-bold">Anchor</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Set your hero brand color. Applying this locks it into Slot 1 and mathematically aligns the other slots to fit.
+                </p>
+                
+                <div class="space-y-3">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Main Hex Value & Swatch</label>
+                        <div class="flex items-center bg-[#171a21] border border-gray-800 rounded-lg p-1.5 space-x-2 focus-within:border-indigo-500 transition-colors">
+                            <div class="relative w-7 h-7 rounded overflow-hidden border border-gray-700">
+                                <input type="color" id="seedColorPicker" value="#6366F1" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                                <div id="seedColorIndicator" class="w-full h-full bg-[#6366F1]"></div>
+                            </div>
+                            <input type="text" id="seedColorInput" placeholder="#6366F1" value="#6366F1" class="w-full bg-transparent text-sm text-gray-200 outline-none uppercase font-mono px-1">
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Harmony Rule Selection</label>
+                        <select id="harmonyMode" class="w-full p-2 bg-[#171a21] border border-gray-800 rounded-lg text-xs text-white outline-none focus:border-indigo-500 cursor-pointer">
+                            <option value="analogous">Analogous (Harmonious Neighbor Colors)</option>
+                            <option value="complementary">Complementary (High-Contrast Opposites)</option>
+                            <option value="triadic">Triadic (Vibrant Bold Triangle)</option>
+                            <option value="monochromatic">Monochromatic (Shades of Same Color)</option>
+                        </select>
+                    </div>
+
+                    <button id="btnApplySeed" class="w-full py-2 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-lg shadow-indigo-600/10 transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-rotate"></i> Generate Colors
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gemini AI Generator Panel -->
+            <div class="p-5 border-b border-gray-800 space-y-4">
+                <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-sparkles text-indigo-400"></i> Gemini AI Brand Architect
+                    </span>
+                    <span class="text-[9px] text-indigo-300 bg-indigo-950 px-1.5 py-0.5 rounded border border-indigo-800 font-mono">v2.5 Flash</span>
+                </div>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Enter any brand vibe or atmosphere. The AI will synchronously curate colors, typography, and taglines.
+                </p>
+                <div class="space-y-2">
+                    <textarea id="aiPromptInput" rows="3" placeholder="e.g. A futuristic cyber-security startup with an active, premium, and trustworthy neon mood" class="w-full text-xs p-2.5 rounded-lg bg-[#171a21] border border-gray-800 text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 resize-none transition-all leading-relaxed"></textarea>
+                    
+                    <!-- AI Generation Button -->
+                    <button id="btnGenerateAI" class="w-full py-2 px-3 rounded-lg bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white text-xs font-semibold shadow-lg shadow-indigo-600/10 flex items-center justify-center gap-2 transition-all">
+                        <i id="aiBtnIcon" class="fa-solid fa-sparkles"></i>
+                        <span id="aiBtnText">Generate Theme with AI</span>
+                    </button>
+                </div>
+                
+                <!-- AI feedback message -->
+                <div id="aiFeedbackBox" class="hidden p-3 rounded-lg bg-indigo-500/10 border border-indigo-500/20 space-y-2">
+                    <div class="text-[11px] font-bold text-indigo-300 flex items-center gap-1">
+                        <i class="fa-solid fa-quote-left text-xs opacity-75"></i>
+                        <span>AI Creative Vibe:</span>
+                    </div>
+                    <p id="aiBrandVibe" class="text-[11px] text-gray-300 italic leading-relaxed"></p>
+                    <div id="aiTagline" class="text-[11px] text-indigo-400 font-semibold font-mono tracking-tight mt-1"></div>
+                </div>
+            </div>
+
+            <!-- Typography Engine Panel -->
+            <div class="p-5 border-b border-gray-800 space-y-4">
+                <span class="text-sm font-semibold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-font text-indigo-400"></i> Typography & Fonts
+                </span>
+                
+                <div class="space-y-3">
+                    <!-- Heading Font Select -->
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Heading Family</label>
+                        <select id="headingFontSelector" class="w-full p-2 bg-[#171a21] border border-gray-800 rounded-lg text-xs text-white outline-none focus:border-indigo-500 cursor-pointer">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Body Font Select -->
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Body Text Family</label>
+                        <select id="bodyFontSelector" class="w-full p-2 bg-[#171a21] border border-gray-800 rounded-lg text-xs text-white outline-none focus:border-indigo-500 cursor-pointer">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+
+                    <!-- Lock Typography -->
+                    <div class="flex items-center justify-between p-2 rounded bg-gray-900/40 border border-gray-800/80">
+                        <span class="text-xs text-gray-300">Lock fonts during random space cycle</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="lockFontsToggle" class="sr-only peer">
+                            <div class="w-8 h-4 bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Tokens Quick Access -->
+            <div class="p-5 mt-auto space-y-3">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider block">Production Snippet</span>
+                <div class="relative bg-gray-950/80 border border-gray-800 rounded-lg p-3 text-[10px] font-mono text-indigo-300 select-all overflow-x-auto font-bold">
+                    <pre id="quickCodeSnippet"></pre>
+                    <button id="btnQuickCopy" class="absolute right-2 top-2 text-gray-500 hover:text-white transition-colors" title="Copy Raw JSON">
+                        <i class="fa-regular fa-copy text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CENTRAL PALETTE GRID & FLOATING VISUAL PREVIEWS -->
+        <main class="flex-1 flex flex-col md:flex-row relative min-h-0 bg-[#0d0f12]">
+            
+            <!-- Column 1 -->
+            <div id="col-0" class="color-column flex-1 relative flex flex-col justify-end p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full">
+                <!-- Column Header Interaction Panel -->
+                <div class="column-actions absolute top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 1 (Anchor)</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="swapSlots(0, -1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(0, 1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Footer Stats & Modifiers -->
+                <div class="space-y-4">
+                    <!-- Color Pill Information Panel -->
+                    <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
+                        <div class="flex items-center justify-between">
+                            <span id="hex-0" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer" onclick="copyIndividualColor(0)" title="Click to copy Hex">#6366F1</span>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="toggleLock(0)" id="lock-btn-0" class="lock-btn w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-xs opacity-80"></i></button>
+                                <button onclick="toggleEditor(0)" class="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-xs opacity-80"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Manual fine tuning editor inside card -->
+                        <div id="editor-0" class="hidden pt-3 border-t border-white/10 space-y-3 text-[11px]">
+                            <!-- Hex Input Box -->
+                            <div class="flex items-center space-x-2">
+                                <span class="text-white/40">HEX:</span>
+                                <input type="text" id="hexinput-0" onchange="manualHexChange(0, this.value)" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 uppercase font-mono text-center text-xs text-white">
+                                <!-- Real time standard HTML Color Picker -->
+                                <div class="relative w-7 h-6 rounded overflow-hidden shrink-0 border border-white/10">
+                                    <input type="color" id="inlinePicker-0" oninput="inlinePickerChange(0, this.value)" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                                    <div id="inlineIndicator-0" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                            <!-- Sliders for Hue, Saturation, Lightness -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-white/60"><span>Hue</span><span id="label-h-0">0°</span></div>
+                                <input type="range" min="0" max="360" id="slider-h-0" oninput="updateSliders(0)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Saturation</span><span id="label-s-0">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-s-0" oninput="updateSliders(0)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Lightness</span><span id="label-l-0">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-l-0" oninput="updateSliders(0)" class="w-full accent-indigo-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 2 -->
+            <div id="col-1" class="color-column flex-1 relative flex flex-col justify-end p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full">
+                <!-- Column Header Interaction Panel -->
+                <div class="column-actions absolute top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 2</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="swapSlots(1, -1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(1, 1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Footer Stats & Modifiers -->
+                <div class="space-y-4">
+                    <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
+                        <div class="flex items-center justify-between">
+                            <span id="hex-1" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer" onclick="copyIndividualColor(1)" title="Click to copy Hex">#10B981</span>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="toggleLock(1)" id="lock-btn-1" class="lock-btn w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-xs opacity-80"></i></button>
+                                <button onclick="toggleEditor(1)" class="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-xs opacity-80"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Manual fine tuning editor inside card -->
+                        <div id="editor-1" class="hidden pt-3 border-t border-white/10 space-y-3 text-[11px]">
+                            <!-- Hex Input Box -->
+                            <div class="flex items-center space-x-2">
+                                <span class="text-white/40">HEX:</span>
+                                <input type="text" id="hexinput-1" onchange="manualHexChange(1, this.value)" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 uppercase font-mono text-center text-xs text-white">
+                                <!-- Real time standard HTML Color Picker -->
+                                <div class="relative w-7 h-6 rounded overflow-hidden shrink-0 border border-white/10">
+                                    <input type="color" id="inlinePicker-1" oninput="inlinePickerChange(1, this.value)" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                                    <div id="inlineIndicator-1" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                            <!-- Sliders for Hue, Saturation, Lightness -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-white/60"><span>Hue</span><span id="label-h-1">0°</span></div>
+                                <input type="range" min="0" max="360" id="slider-h-1" oninput="updateSliders(1)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Saturation</span><span id="label-s-1">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-s-1" oninput="updateSliders(1)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Lightness</span><span id="label-l-1">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-l-1" oninput="updateSliders(1)" class="w-full accent-indigo-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 3 -->
+            <div id="col-2" class="color-column flex-1 relative flex flex-col justify-end p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full">
+                <!-- Column Header Interaction Panel -->
+                <div class="column-actions absolute top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 3</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="swapSlots(2, -1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(2, 1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Footer Stats & Modifiers -->
+                <div class="space-y-4">
+                    <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
+                        <div class="flex items-center justify-between">
+                            <span id="hex-2" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer" onclick="copyIndividualColor(2)" title="Click to copy Hex">#F59E0B</span>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="toggleLock(2)" id="lock-btn-2" class="lock-btn w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-xs opacity-80"></i></button>
+                                <button onclick="toggleEditor(2)" class="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-xs opacity-80"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Manual fine tuning editor inside card -->
+                        <div id="editor-2" class="hidden pt-3 border-t border-white/10 space-y-3 text-[11px]">
+                            <!-- Hex Input Box -->
+                            <div class="flex items-center space-x-2">
+                                <span class="text-white/40">HEX:</span>
+                                <input type="text" id="hexinput-2" onchange="manualHexChange(2, this.value)" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 uppercase font-mono text-center text-xs text-white">
+                                <!-- Real time standard HTML Color Picker -->
+                                <div class="relative w-7 h-6 rounded overflow-hidden shrink-0 border border-white/10">
+                                    <input type="color" id="inlinePicker-2" oninput="inlinePickerChange(2, this.value)" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                                    <div id="inlineIndicator-2" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                            <!-- Sliders for Hue, Saturation, Lightness -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-white/60"><span>Hue</span><span id="label-h-2">0°</span></div>
+                                <input type="range" min="0" max="360" id="slider-h-2" oninput="updateSliders(2)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Saturation</span><span id="label-s-2">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-s-2" oninput="updateSliders(2)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Lightness</span><span id="label-l-2">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-l-2" oninput="updateSliders(2)" class="w-full accent-indigo-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 4 -->
+            <div id="col-3" class="color-column flex-1 relative flex flex-col justify-end p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full">
+                <!-- Column Header Interaction Panel -->
+                <div class="column-actions absolute top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 4</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="swapSlots(3, -1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(3, 1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Footer Stats & Modifiers -->
+                <div class="space-y-4">
+                    <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
+                        <div class="flex items-center justify-between">
+                            <span id="hex-3" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer" onclick="copyIndividualColor(3)" title="Click to copy Hex">#EF4444</span>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="toggleLock(3)" id="lock-btn-3" class="lock-btn w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-xs opacity-80"></i></button>
+                                <button onclick="toggleEditor(3)" class="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-xs opacity-80"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Manual fine tuning editor inside card -->
+                        <div id="editor-3" class="hidden pt-3 border-t border-white/10 space-y-3 text-[11px]">
+                            <!-- Hex Input Box -->
+                            <div class="flex items-center space-x-2">
+                                <span class="text-white/40">HEX:</span>
+                                <input type="text" id="hexinput-3" onchange="manualHexChange(3, this.value)" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 uppercase font-mono text-center text-xs text-white">
+                                <!-- Real time standard HTML Color Picker -->
+                                <div class="relative w-7 h-6 rounded overflow-hidden shrink-0 border border-white/10">
+                                    <input type="color" id="inlinePicker-3" oninput="inlinePickerChange(3, this.value)" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                                    <div id="inlineIndicator-3" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                            <!-- Sliders for Hue, Saturation, Lightness -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-white/60"><span>Hue</span><span id="label-h-3">0°</span></div>
+                                <input type="range" min="0" max="360" id="slider-h-3" oninput="updateSliders(3)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Saturation</span><span id="label-s-3">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-s-3" oninput="updateSliders(3)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Lightness</span><span id="label-l-3">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-l-3" oninput="updateSliders(3)" class="w-full accent-indigo-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Column 5 -->
+            <div id="col-4" class="color-column flex-1 relative flex flex-col justify-end p-6 md:pb-12 border-b md:border-b-0 min-h-[14vh] md:min-h-full">
+                <!-- Column Header Interaction Panel -->
+                <div class="column-actions absolute top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 5</span>
+                    <div class="flex items-center space-x-1.5">
+                        <button onclick="swapSlots(4, -1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(4, 1)" class="w-8 h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" disabled class="opacity-30" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Footer Stats & Modifiers -->
+                <div class="space-y-4">
+                    <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
+                        <div class="flex items-center justify-between">
+                            <span id="hex-4" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer" onclick="copyIndividualColor(4)" title="Click to copy Hex">#8B5CF6</span>
+                            <div class="flex items-center space-x-1">
+                                <button onclick="toggleLock(4)" id="lock-btn-4" class="lock-btn w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-xs opacity-80"></i></button>
+                                <button onclick="toggleEditor(4)" class="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-xs opacity-80"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Manual fine tuning editor inside card -->
+                        <div id="editor-4" class="hidden pt-3 border-t border-white/10 space-y-3 text-[11px]">
+                            <!-- Hex Input Box -->
+                            <div class="flex items-center space-x-2">
+                                <span class="text-white/40">HEX:</span>
+                                <input type="text" id="hexinput-4" onchange="manualHexChange(4, this.value)" class="w-full bg-black/40 border border-white/10 rounded px-2 py-1 uppercase font-mono text-center text-xs text-white">
+                                <!-- Real time standard HTML Color Picker -->
+                                <div class="relative w-7 h-6 rounded overflow-hidden shrink-0 border border-white/10">
+                                    <input type="color" id="inlinePicker-4" oninput="inlinePickerChange(4, this.value)" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
+                                    <div id="inlineIndicator-4" class="w-full h-full"></div>
+                                </div>
+                            </div>
+                            <!-- Sliders for Hue, Saturation, Lightness -->
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-white/60"><span>Hue</span><span id="label-h-4">0°</span></div>
+                                <input type="range" min="0" max="360" id="slider-h-4" oninput="updateSliders(4)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Saturation</span><span id="label-s-4">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-s-4" oninput="updateSliders(4)" class="w-full accent-indigo-500">
+                                
+                                <div class="flex justify-between text-white/60"><span>Lightness</span><span id="label-l-4">0%</span></div>
+                                <input type="range" min="0" max="100" id="slider-l-4" oninput="updateSliders(4)" class="w-full accent-indigo-500">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DRAGGABLE FLOATING DESIGN SYSTEM MOCKUP CANVAS -->
+            <div id="visualPreviewModal" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-lg bg-[#111319] border border-gray-800 rounded-2xl shadow-2xl overflow-hidden z-20 flex flex-col transition-all hidden animate-in fade-in zoom-in duration-200">
+                <!-- Preview Header Controls -->
+                <div class="p-4 bg-[#171a21] border-b border-gray-800/80 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                        <span class="text-xs font-semibold text-gray-400 font-mono ml-2">Mockup Preview Tool</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5">
+                        <button id="btnTogglePreviewLayout" class="px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-[11px] font-semibold text-indigo-400 rounded border border-gray-700 transition-colors">
+                            <i class="fa-solid fa-rotate mr-1"></i> Switch Layout
+                        </button>
+                        <button id="btnClosePreview" class="w-7 h-7 rounded hover:bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Styled Layout 1: SaaS Hero Segment -->
+                <div id="mockupLayout1" class="p-8 flex flex-col space-y-6 bg-slate-900 transition-colors duration-300">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 rounded-full inline-block" id="mockupLogoCircle"></div>
+                            <span class="text-sm font-bold tracking-tight text-white" id="mockupLogoText">SyncFlow</span>
+                        </div>
+                        <nav class="space-x-3 text-xs text-slate-400 font-medium">
+                            <span class="hover:text-white cursor-pointer">Platform</span>
+                            <span class="hover:text-white cursor-pointer">Specs</span>
+                        </nav>
+                    </div>
+
+                    <div class="space-y-4 py-4">
+                        <span id="mockupBadge" class="inline-block text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border">
+                            REVOLUTIONARY SAAS
+                        </span>
+                        <h1 id="previewHeading" class="text-2xl md:text-3xl font-extrabold leading-tight text-white tracking-tight">
+                            Design products with unified design tokens.
+                        </h1>
+                        <p id="previewBody" class="text-xs md:text-sm text-slate-400 leading-relaxed max-w-md">
+                            Eliminate communication overhead. Bring standard functional color wheel palettes directly together with dynamic premium Google Fonts styling to deployment-ready codes.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <button id="previewButtonPrimary" class="px-5 py-2 rounded-lg text-xs font-bold shadow-md transition-all">
+                            Initialize Free Sync
+                        </button>
+                        <button id="previewButtonSecondary" class="px-5 py-2 rounded-lg text-xs font-bold border transition-all">
+                            Documentation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Styled Layout 2: Clean Executive Dashboard -->
+                <div id="mockupLayout2" class="p-6 bg-slate-950 transition-colors duration-300 hidden">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-900">
+                        <div>
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">ADMIN PLATFORM</span>
+                            <span class="text-xs font-bold text-slate-200" id="previewDashTitle">Marketing Campaign Dashboard</span>
+                        </div>
+                        <i class="fa-solid fa-ellipsis-vertical text-slate-400"></i>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3 mb-4">
+                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                            <span class="text-[9px] font-bold text-slate-500 block">CLICK-THROUGHS</span>
+                            <span class="text-md font-extrabold text-white" id="previewMetric1">12,482</span>
+                            <span class="text-[9px] text-green-400 block mt-0.5"><i class="fa-solid fa-arrow-up mr-0.5"></i> 14.2%</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                            <span class="text-[9px] font-bold text-slate-500 block">ACQUISITION COST</span>
+                            <span class="text-md font-extrabold text-white" id="previewMetric2">$0.45</span>
+                            <span class="text-[9px] text-red-400 block mt-0.5"><i class="fa-solid fa-arrow-down mr-0.5"></i> 3.8%</span>
+                        </div>
+                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                            <span class="text-[9px] font-bold text-slate-500 block">BOUNCE RATE</span>
+                            <span class="text-md font-extrabold text-white" id="previewMetric3">24.1%</span>
+                            <span class="text-[9px] text-slate-400 block mt-0.5">Stable</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-3">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Visual Design Assessment</span>
+                        <p id="previewVibeBody" class="text-[11px] text-slate-400 leading-relaxed italic">
+                            The visual palette harmony balances high-contrast interactive links against smooth content frames. Update variables using spacebar synchronization.
+                        </p>
+                        <div class="flex items-center space-x-1.5 pt-1">
+                            <span id="colorDot0" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                            <span id="colorDot1" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                            <span id="colorDot2" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                            <span id="colorDot3" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                            <span id="colorDot4" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- FLOATING UTILITY CONTROLLER FOR MOBILE VIEWPORTS -->
+        <div class="fixed bottom-4 right-4 z-40 flex items-center space-x-2 md:hidden">
+            <button id="btnOpenMobileAi" class="w-12 h-12 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center shadow-lg"><i class="fa-solid fa-sparkles"></i></button>
+            <button id="btnToggleMobilePreview" class="w-12 h-12 rounded-full bg-gray-900 border border-gray-800 text-white flex items-center justify-center shadow-lg"><i class="fa-solid fa-desktop"></i></button>
+        </div>
+
     </div>
-  </header>
 
-  <main class="layout">
+    <!-- EXPORT MODAL -->
+    <div id="exportModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-300 hidden">
+        <div class="bg-[#111319] border border-gray-800 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <!-- Header -->
+            <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-solid fa-code text-indigo-400 text-lg"></i>
+                    <span class="font-bold text-white text-md">Export Palette & Typography Tokens</span>
+                </div>
+                <button id="btnCloseExport" class="w-8 h-8 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-    <!-- CONTROLS -->
-    <section class="panel">
-      <h2>Controls</h2>
+            <!-- Content tabs -->
+            <div class="flex border-b border-gray-800 text-xs font-semibold bg-[#171a21]">
+                <button onclick="switchExportTab('css')" id="tabBtn-css" class="px-5 py-3 border-b-2 border-indigo-500 text-indigo-400">CSS Custom Properties</button>
+                <button onclick="switchExportTab('tailwind')" id="tabBtn-tailwind" class="px-5 py-3 border-b-2 border-transparent text-gray-400 hover:text-white">Tailwind Object</button>
+                <button onclick="switchExportTab('json')" id="tabBtn-json" class="px-5 py-3 border-b-2 border-transparent text-gray-400 hover:text-white">Raw JSON Tokens</button>
+            </div>
 
-      <label>
-        Base Color
-        <input type="color" id="baseColor"/>
-      </label>
+            <!-- Tab Content Display -->
+            <div class="p-5 space-y-4">
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Instantly copy production variables to inject direct variables into your React, Vue, or Webpack configurations.
+                </p>
 
-      <label>
-        Saturation
-        <input type="range" id="saturation" min="20" max="100" value="70"/>
-      </label>
+                <div class="relative bg-gray-950 border border-gray-800 rounded-xl p-4 overflow-x-auto text-xs font-mono text-indigo-300 max-h-64">
+                    <pre id="exportCodeBlock" class="select-all"></pre>
+                </div>
 
-      <label>
-        Brightness
-        <input type="range" id="lightness" min="20" max="80" value="55"/>
-      </label>
+                <div class="flex items-center justify-between">
+                    <span class="text-[10px] text-gray-500 font-medium">Click code block or use copy button to grab snippet</span>
+                    <button id="btnCopyToClipboard" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all">
+                        <i class="fa-regular fa-copy"></i>
+                        <span>Copy Code Block</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-      <label>
-        Harmony
-        <select id="harmony">
-          <option value="random">Random</option>
-          <option value="analogous">Analogous</option>
-          <option value="complementary">Complementary</option>
-          <option value="triadic">Triadic</option>
-        </select>
-      </label>
-    </section>
+    <!-- AI ASSISTANT MOBILE PANEL / POPUP SHEET -->
+    <div id="aiMobileSheet" class="fixed inset-x-0 bottom-0 bg-[#0f1115] border-t border-gray-800 rounded-t-2xl z-50 p-5 space-y-4 shadow-2xl transform translate-y-full transition-transform duration-300 lg:hidden">
+        <div class="w-12 h-1.5 bg-gray-700 rounded-full mx-auto -mt-2 mb-3 cursor-pointer" id="btnSwipeClose"></div>
+        <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-white flex items-center gap-1.5"><i class="fa-solid fa-sparkles text-indigo-400"></i> AI Creative Generator</span>
+            <button id="btnCloseMobileSheet" class="text-xs text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <textarea id="aiMobilePromptInput" rows="3" placeholder="Describe the vibe you want..." class="w-full text-xs p-3 rounded-lg bg-[#171a21] border border-gray-800 text-white placeholder-gray-500 outline-none focus:border-indigo-500 resize-none"></textarea>
+        <button id="btnGenerateAIMobile" class="w-full py-2.5 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-semibold flex items-center justify-center gap-2">
+            <i class="fa-solid fa-sparkles"></i>
+            <span>Build Theme</span>
+        </button>
+    </div>
 
-    <!-- PALETTE -->
-    <section class="panel">
-      <h2>Palette</h2>
-      <div id="palette" class="palette"></div>
-    </section>
+    <!-- TOAST NOTIFICATION STACK -->
+    <div id="toastContainer" class="fixed bottom-6 left-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
-    <!-- PREVIEW -->
-    <section class="panel preview">
-      <h2>Preview</h2>
-
-      <div class="mock">
-        <h1>Design that feels intentional</h1>
-        <p>Beautiful systems emerge from constraint, not randomness.</p>
-        <button>Get Started</button>
-      </div>
-    </section>
-
-    <!-- FAVORITES -->
-    <section class="panel">
-      <h2>Favorites</h2>
-      <div id="favorites"></div>
-    </section>
-
-  </main>
-
-  <script type="module" src="./js/app.js"></script>
+    <!-- Link to external JS file -->
+    <script src="script.js" defer></script>
 </body>
 </html>

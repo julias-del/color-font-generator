@@ -1,104 +1,41 @@
-:root {
-  --bg: #f9fafb;
-  --panel: #ffffff;
-  --text: #111827;
-  --muted: #6b7280;
-  --accent: #6366f1;
-  --border: #e5e7eb;
-}
-
-body.dark {
-  --bg: #1e1e1e;
-  --panel: #262626;
-  --text: #f5f5f5;
-  --muted: #a1a1aa;
-  --border: #3a3a3a;
-}
-
 body {
-  margin: 0;
-  font-family: Inter, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+    background-color: #0d0f12;
+    color: #f3f4f6;
+    overflow-x: hidden;
 }
-
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  background: var(--bg);
+/* Custom scrollbar for premium feel */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
-
-.brand h1 {
-  margin: 0;
-  font-size: 18px;
+::-webkit-scrollbar-track {
+    background: #0d0f12;
 }
-
-.shortcuts {
-  font-size: 12px;
-  color: var(--muted);
-  display: flex;
-  gap: 10px;
+::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 4px;
 }
-
-kbd {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  padding: 2px 6px;
-  border-radius: 6px;
+::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
 }
-
-.actions button {
-  margin-left: 6px;
+/* Soft, immersive transitions for colors */
+.color-column {
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease;
 }
-
-.layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  padding: 14px;
+.color-column:hover .column-actions {
+    opacity: 1;
+    transform: translateY(0);
 }
-
-.panel {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 14px;
+.color-pill {
+    backdrop-filter: blur(12px);
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
-
-.palette {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+/* Lock icon bounce effect */
+.lock-btn:active i {
+    transform: scale(0.8) rotate(-15deg);
 }
-
-.swatch {
-  width: 60px;
-  height: 60px;
-  border-radius: 10px;
-  cursor: pointer;
-  border: 1px solid var(--border);
-}
-
-.preview .mock {
-  padding: 16px;
-  border-radius: 12px;
-  background: #fff;
-}
-
-body.dark .preview .mock {
-  background: #2a2a2a;
-}
-
-@media (max-width: 800px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .shortcuts {
-    display: none;
-  }
+.locked-state {
+    border-color: rgba(245, 158, 11, 0.4) !important;
+    background: rgba(15, 23, 42, 0.85) !important;
 }
