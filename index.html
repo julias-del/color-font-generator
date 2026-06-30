@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons for beautiful developer workspace interface -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="favicon.png">
     
     <!-- Immersive custom CSS styles -->
     <style>
@@ -34,7 +35,7 @@
         }
         /* Soft, immersive transitions for colors */
         .color-column {
-            transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease;
+            transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease, border-color 0.2s ease;
         }
         .color-column:hover .column-actions {
             opacity: 1;
@@ -55,7 +56,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col font-sans select-none pb-16 md:pb-0">
+<body class="min-h-screen flex flex-col font-sans select-none pb-16 lg:pb-0">
 
     <!-- SIDEBAR SCRIM OVERLAY (Mobile/Tablet Only) -->
     <div id="sidebarScrim" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 hidden transition-opacity duration-300" onclick="toggleAiDrawer()"></div>
@@ -100,7 +101,7 @@
     </header>
 
     <!-- MOBILE SEED CONTROL BAR -->
-    <div class="flex md:hidden bg-[#0f1115] border-b border-gray-800 p-2.5 space-x-2 overflow-x-auto shrink-0 z-20">
+    <div class="flex lg:hidden bg-[#0f1115] border-b border-gray-800 p-2.5 space-x-2 overflow-x-auto shrink-0 z-20">
         <div class="flex items-center bg-[#171a21] border border-gray-800 rounded-lg p-1 space-x-2 flex-1 min-w-[310px]">
             <div class="relative w-7 h-7 rounded overflow-hidden border border-gray-700">
                 <input type="color" id="seedColorPickerMobile" value="#6366F1" class="absolute inset-0 opacity-0 cursor-pointer scale-150">
@@ -119,13 +120,13 @@
     </div>
 
     <!-- MAIN WORKSPACE CONTAINER -->
-    <div class="flex-1 flex flex-col md:flex-row relative overflow-hidden">
+    <div class="flex-1 flex flex-col lg:flex-row relative overflow-hidden">
         
         <!-- SIDEBAR - AI BRAND BUILDER & MANUAL CONTROLLER -->
-        <aside id="sidebarPanel" class="fixed md:static inset-y-0 left-0 w-80 bg-[#0f1115] border-r border-gray-800 overflow-y-auto shrink-0 z-40 transition-transform duration-300 translate-x-0 flex flex-col">
+        <aside id="sidebarPanel" class="fixed lg:static inset-y-0 left-0 w-80 bg-[#0f1115] border-r border-gray-800 overflow-y-auto shrink-0 z-40 transition-transform duration-300 translate-x-0 flex flex-col">
             
             <!-- Sidebar Close Header (Mobile/Tablet Drawer Only) -->
-            <div class="p-3 border-b border-gray-800 flex items-center justify-between md:hidden bg-[#13161c]">
+            <div class="p-3 border-b border-gray-800 flex items-center justify-between lg:hidden bg-[#13161c]">
                 <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Canvas Workspace Drawer</span>
                 <button onclick="toggleAiDrawer()" class="w-8 h-8 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center">
                     <i class="fa-solid fa-xmark text-md"></i>
@@ -260,16 +261,19 @@
         </aside>
 
         <!-- CENTRAL PALETTE GRID & FLOATING VISUAL PREVIEWS -->
-        <main id="colorContainer" class="flex-1 flex flex-col md:flex-row relative min-h-0 bg-[#0d0f12]">
+        <main id="colorContainer" class="flex-1 flex flex-col lg:flex-row relative min-h-0 bg-[#0d0f12]">
             
             <!-- Column 1 -->
-            <div id="col-0" class="color-column flex-1 relative flex flex-col justify-end p-4 md:p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full h-1/5 md:h-auto">
+            <div id="col-0" class="color-column flex-1 relative flex flex-col justify-end p-4 lg:p-6 lg:pb-12 border-b lg:border-b-0 lg:border-r border-gray-800/60 min-h-[14vh] lg:min-h-full h-1/5 lg:h-auto" draggable="true">
                 <!-- Column Header Interaction Panel -->
-                <div class="column-actions absolute top-2 md:top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
-                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 1 (Anchor)</span>
+                <div class="column-actions absolute top-2 lg:top-4 left-4 right-4 lg:opacity-0 lg:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10 cursor-grab">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                        <span>Slot 1 (Anchor)</span>
+                    </span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="swapSlots(0, -1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
-                        <button onclick="swapSlots(0, 1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                        <button onclick="swapSlots(0, -1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(0, 1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
                     </div>
                 </div>
 
@@ -278,7 +282,7 @@
                     <!-- Color Pill Information Panel -->
                     <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
                         <div class="flex items-center justify-between">
-                            <span id="hex-0" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(0)" title="Click to copy Hex">#6366F1</span>
+                            <span id="hex-0" class="text-md lg:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(0)" title="Click to copy Hex">#6366F1</span>
                             <div class="flex items-center space-x-1.5">
                                 <button onclick="toggleLock(0)" id="lock-btn-0" class="lock-btn w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-sm opacity-80"></i></button>
                                 <button onclick="toggleEditor(0)" class="w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-sm opacity-80"></i></button>
@@ -314,13 +318,16 @@
             </div>
 
             <!-- Column 2 -->
-            <div id="col-1" class="color-column flex-1 relative flex flex-col justify-end p-4 md:p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full h-1/5 md:h-auto">
+            <div id="col-1" class="color-column flex-1 relative flex flex-col justify-end p-4 lg:p-6 lg:pb-12 border-b lg:border-b-0 lg:border-r border-gray-800/60 min-h-[14vh] lg:min-h-full h-1/5 lg:h-auto" draggable="true">
                 <!-- Column Header Interaction Panel -->
-                <div class="column-actions absolute top-2 md:top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
-                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 2</span>
+                <div class="column-actions absolute top-2 lg:top-4 left-4 right-4 lg:opacity-0 lg:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10 cursor-grab">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                        <span>Slot 2</span>
+                    </span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="swapSlots(1, -1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
-                        <button onclick="swapSlots(1, 1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                        <button onclick="swapSlots(1, -1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(1, 1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
                     </div>
                 </div>
 
@@ -328,7 +335,7 @@
                 <div class="space-y-4">
                     <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
                         <div class="flex items-center justify-between">
-                            <span id="hex-1" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(1)" title="Click to copy Hex">#10B981</span>
+                            <span id="hex-1" class="text-md lg:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(1)" title="Click to copy Hex">#10B981</span>
                             <div class="flex items-center space-x-1.5">
                                 <button onclick="toggleLock(1)" id="lock-btn-1" class="lock-btn w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-sm opacity-80"></i></button>
                                 <button onclick="toggleEditor(1)" class="w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-sm opacity-80"></i></button>
@@ -364,13 +371,16 @@
             </div>
 
             <!-- Column 3 -->
-            <div id="col-2" class="color-column flex-1 relative flex flex-col justify-end p-4 md:p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full h-1/5 md:h-auto">
+            <div id="col-2" class="color-column flex-1 relative flex flex-col justify-end p-4 lg:p-6 lg:pb-12 border-b lg:border-b-0 lg:border-r border-gray-800/60 min-h-[14vh] lg:min-h-full h-1/5 lg:h-auto" draggable="true">
                 <!-- Column Header Interaction Panel -->
-                <div class="column-actions absolute top-2 md:top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
-                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 3</span>
+                <div class="column-actions absolute top-2 lg:top-4 left-4 right-4 lg:opacity-0 lg:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10 cursor-grab">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                        <span>Slot 3</span>
+                    </span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="swapSlots(2, -1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
-                        <button onclick="swapSlots(2, 1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                        <button onclick="swapSlots(2, -1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(2, 1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
                     </div>
                 </div>
 
@@ -378,7 +388,7 @@
                 <div class="space-y-4">
                     <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
                         <div class="flex items-center justify-between">
-                            <span id="hex-2" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(2)" title="Click to copy Hex">#F59E0B</span>
+                            <span id="hex-2" class="text-md lg:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(2)" title="Click to copy Hex">#F59E0B</span>
                             <div class="flex items-center space-x-1.5">
                                 <button onclick="toggleLock(2)" id="lock-btn-2" class="lock-btn w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-sm opacity-80"></i></button>
                                 <button onclick="toggleEditor(2)" class="w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-sm opacity-80"></i></button>
@@ -414,13 +424,16 @@
             </div>
 
             <!-- Column 4 -->
-            <div id="col-3" class="color-column flex-1 relative flex flex-col justify-end p-4 md:p-6 md:pb-12 border-b md:border-b-0 md:border-r border-gray-800/60 min-h-[14vh] md:min-h-full h-1/5 md:h-auto">
+            <div id="col-3" class="color-column flex-1 relative flex flex-col justify-end p-4 lg:p-6 lg:pb-12 border-b lg:border-b-0 lg:border-r border-gray-800/60 min-h-[14vh] lg:min-h-full h-1/5 lg:h-auto" draggable="true">
                 <!-- Column Header Interaction Panel -->
-                <div class="column-actions absolute top-2 md:top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
-                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 4</span>
+                <div class="column-actions absolute top-2 lg:top-4 left-4 right-4 lg:opacity-0 lg:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10 cursor-grab">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                        <span>Slot 4</span>
+                    </span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="swapSlots(3, -1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
-                        <button onclick="swapSlots(3, 1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                        <button onclick="swapSlots(3, -1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(3, 1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
                     </div>
                 </div>
 
@@ -428,7 +441,7 @@
                 <div class="space-y-4">
                     <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
                         <div class="flex items-center justify-between">
-                            <span id="hex-3" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(3)" title="Click to copy Hex">#EF4444</span>
+                            <span id="hex-3" class="text-md lg:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(3)" title="Click to copy Hex">#EF4444</span>
                             <div class="flex items-center space-x-1.5">
                                 <button onclick="toggleLock(3)" id="lock-btn-3" class="lock-btn w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-sm opacity-80"></i></button>
                                 <button onclick="toggleEditor(3)" class="w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-sm opacity-80"></i></button>
@@ -464,13 +477,16 @@
             </div>
 
             <!-- Column 5 -->
-            <div id="col-4" class="color-column flex-1 relative flex flex-col justify-end p-4 md:p-6 md:pb-12 border-b md:border-b-0 min-h-[14vh] md:min-h-full h-1/5 md:h-auto">
+            <div id="col-4" class="color-column flex-1 relative flex flex-col justify-end p-4 lg:p-6 lg:pb-12 border-b lg:border-b-0 min-h-[14vh] lg:min-h-full h-1/5 lg:h-auto" draggable="true">
                 <!-- Column Header Interaction Panel -->
-                <div class="column-actions absolute top-2 md:top-4 left-4 right-4 md:opacity-0 md:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10">
-                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider">Slot 5</span>
+                <div class="column-actions absolute top-2 lg:top-4 left-4 right-4 lg:opacity-0 lg:translate-y-[-4px] transition-all duration-300 flex items-center justify-between z-10 cursor-grab">
+                    <span class="text-[10px] text-white/50 bg-black/45 px-2 py-1 rounded font-mono font-bold uppercase tracking-wider flex items-center gap-1.5">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                        <span>Slot 5</span>
+                    </span>
                     <div class="flex items-center space-x-1.5">
-                        <button onclick="swapSlots(4, -1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
-                        <button onclick="swapSlots(4, 1)" class="w-9 h-9 md:w-8 md:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" disabled class="opacity-30" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
+                        <button onclick="swapSlots(4, -1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" title="Move Left"><i class="fa-solid fa-arrow-left text-xs"></i></button>
+                        <button onclick="swapSlots(4, 1)" class="w-9 h-9 lg:w-8 lg:h-8 rounded-lg bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition-colors shadow-sm" disabled class="opacity-30" title="Move Right"><i class="fa-solid fa-arrow-right text-xs"></i></button>
                     </div>
                 </div>
 
@@ -478,7 +494,7 @@
                 <div class="space-y-4">
                     <div class="color-pill p-3.5 rounded-xl flex flex-col space-y-2.5 shadow-xl transition-all">
                         <div class="flex items-center justify-between">
-                            <span id="hex-4" class="text-md md:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(4)" title="Click to copy Hex">#8B5CF6</span>
+                            <span id="hex-4" class="text-md lg:text-xl font-black font-mono tracking-tight uppercase cursor-pointer py-1" onclick="copyIndividualColor(4)" title="Click to copy Hex">#8B5CF6</span>
                             <div class="flex items-center space-x-1.5">
                                 <button onclick="toggleLock(4)" id="lock-btn-4" class="lock-btn w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-lock-open text-sm opacity-80"></i></button>
                                 <button onclick="toggleEditor(4)" class="w-9 h-9 md:w-8 md:h-8 rounded-md hover:bg-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-sliders text-sm opacity-80"></i></button>
@@ -513,109 +529,10 @@
                 </div>
             </div>
 
-            <!-- DRAGGABLE FLOATING DESIGN SYSTEM MOCKUP CANVAS (Viewport centered responsive modal) -->
-            <div id="visualPreviewModal" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-lg bg-[#111319] border border-gray-800 rounded-2xl shadow-2xl overflow-hidden z-25 flex flex-col transition-all hidden max-h-[85vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
-                <!-- Preview Header Controls -->
-                <div class="p-4 bg-[#171a21] border-b border-gray-800/80 flex items-center justify-between sticky top-0 z-10">
-                    <div class="flex items-center space-x-2">
-                        <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
-                        <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
-                        <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
-                        <span class="text-xs font-semibold text-gray-400 font-mono ml-2">Mockup Preview Tool</span>
-                    </div>
-                    <div class="flex items-center space-x-1.5">
-                        <button id="btnTogglePreviewLayout" class="px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 text-[11px] font-semibold text-indigo-400 rounded border border-gray-700 transition-colors min-h-[32px]">
-                            <i class="fa-solid fa-rotate mr-1"></i> Switch Layout
-                        </button>
-                        <button id="btnClosePreview" class="w-8 h-8 rounded hover:bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
-                            <i class="fa-solid fa-xmark text-sm"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Live Styled Layout 1: SaaS Hero Segment -->
-                <div id="mockupLayout1" class="p-6 md:p-8 flex flex-col space-y-6 bg-slate-900 transition-colors duration-300">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-6 h-6 rounded-full inline-block" id="mockupLogoCircle"></div>
-                            <span class="text-sm font-bold tracking-tight text-white" id="mockupLogoText">SyncFlow</span>
-                        </div>
-                        <nav class="space-x-3 text-xs text-slate-400 font-medium">
-                            <span class="hover:text-white cursor-pointer">Platform</span>
-                            <span class="hover:text-white cursor-pointer">Specs</span>
-                        </nav>
-                    </div>
-
-                    <div class="space-y-4 py-4">
-                        <span id="mockupBadge" class="inline-block text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border">
-                            REVOLUTIONARY SAAS
-                        </span>
-                        <h1 id="previewHeading" class="text-2xl md:text-3xl font-extrabold leading-tight text-white tracking-tight">
-                            Design products with unified design tokens.
-                        </h1>
-                        <p id="previewBody" class="text-xs md:text-sm text-slate-400 leading-relaxed max-w-md">
-                            Eliminate communication overhead. Bring standard functional color wheel palettes directly together with dynamic premium Google Fonts styling to deployment-ready codes.
-                        </p>
-                    </div>
-
-                    <div class="flex flex-wrap gap-2.5 items-center">
-                        <button id="previewButtonPrimary" class="px-5 py-2.5 rounded-lg text-xs font-bold shadow-md transition-all min-h-[38px]">
-                            Initialize Free Sync
-                        </button>
-                        <button id="previewButtonSecondary" class="px-5 py-2.5 rounded-lg text-xs font-bold border transition-all min-h-[38px]">
-                            Documentation
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Live Styled Layout 2: Clean Executive Dashboard -->
-                <div id="mockupLayout2" class="p-5 md:p-6 bg-slate-950 transition-colors duration-300 hidden">
-                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-900">
-                        <div>
-                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">ADMIN PLATFORM</span>
-                            <span class="text-xs font-bold text-slate-200" id="previewDashTitle">Marketing Campaign Dashboard</span>
-                        </div>
-                        <i class="fa-solid fa-ellipsis-vertical text-slate-400"></i>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2.5 mb-4">
-                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                            <span class="text-[9px] font-bold text-slate-500 block">CLICK-THROUGHS</span>
-                            <span class="text-md font-extrabold text-white" id="previewMetric1">12,482</span>
-                            <span class="text-[9px] text-green-400 block mt-0.5"><i class="fa-solid fa-arrow-up mr-0.5"></i> 14.2%</span>
-                        </div>
-                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                            <span class="text-[9px] font-bold text-slate-500 block">ACQUISITION COST</span>
-                            <span class="text-md font-extrabold text-white" id="previewMetric2">$0.45</span>
-                            <span class="text-[9px] text-red-400 block mt-0.5"><i class="fa-solid fa-arrow-down mr-0.5"></i> 3.8%</span>
-                        </div>
-                        <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
-                            <span class="text-[9px] font-bold text-slate-500 block">BOUNCE RATE</span>
-                            <span class="text-md font-extrabold text-white" id="previewMetric3">24.1%</span>
-                            <span class="text-[9px] text-slate-400 block mt-0.5">Stable</span>
-                        </div>
-                    </div>
-
-                    <div class="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-3">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Visual Design Assessment</span>
-                        <p id="previewVibeBody" class="text-[11px] text-slate-400 leading-relaxed italic">
-                            The visual palette harmony balances high-contrast interactive links against smooth content frames. Update variables using spacebar synchronization.
-                        </p>
-                        <div class="flex items-center space-x-1.5 pt-1">
-                            <span id="colorDot0" class="w-3.5 h-3.5 rounded-full inline-block"></span>
-                            <span id="colorDot1" class="w-3.5 h-3.5 rounded-full inline-block"></span>
-                            <span id="colorDot2" class="w-3.5 h-3.5 rounded-full inline-block"></span>
-                            <span id="colorDot3" class="w-3.5 h-3.5 rounded-full inline-block"></span>
-                            <span id="colorDot4" class="w-3.5 h-3.5 rounded-full inline-block"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </main>
 
         <!-- HIGHLY RESPONSIVE BOTTON STICKY NAVIGATION BAR (Mobile & Tablet Viewports Only) -->
-        <div class="md:hidden fixed bottom-0 inset-x-0 h-16 bg-[#0f1115] border-t border-gray-800 flex items-center justify-around px-4 z-40 shadow-xl shadow-black/80">
+        <div class="lg:hidden fixed bottom-0 inset-x-0 h-16 bg-[#0f1115] border-t border-gray-800 flex items-center justify-around px-4 z-40 shadow-xl shadow-black/80">
             <button onclick="toggleAiDrawer()" class="flex flex-col items-center justify-center text-gray-400 hover:text-indigo-400 min-w-[50px] h-full">
                 <i class="fa-solid fa-layer-group text-lg"></i>
                 <span class="text-[9px] mt-0.5 font-medium tracking-tight">Toolkit</span>
@@ -673,8 +590,109 @@
         </div>
     </div>
 
+    <!-- GLOBALLY ISOLATED VISUAL PREVIEW MODAL OVERLAY (z-50 wrapper protecting mockup layout overlay) -->
+    <div id="visualPreviewModalContainer" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 transition-all duration-300 hidden">
+        <div id="visualPreviewModal" class="bg-[#111319] border border-gray-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto animate-in fade-in zoom-in duration-200">
+            <!-- Preview Header Controls -->
+            <div class="p-4 bg-[#171a21] border-b border-gray-800/80 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                    <span class="text-xs font-semibold text-gray-400 font-mono ml-2">Mockup Preview Tool</span>
+                </div>
+                <div class="flex items-center space-x-1.5">
+                    <button id="btnTogglePreviewLayout" class="px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 text-[11px] font-semibold text-indigo-400 rounded border border-gray-700 transition-colors min-h-[32px]">
+                        <i class="fa-solid fa-rotate mr-1"></i> Switch Layout
+                    </button>
+                    <button id="btnClosePreview" class="w-8 h-8 rounded hover:bg-gray-800 text-gray-400 hover:text-white flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Styled Layout 1: SaaS Hero Segment -->
+            <div id="mockupLayout1" class="p-6 lg:p-8 flex flex-col space-y-6 bg-slate-900 transition-colors duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-6 h-6 rounded-full inline-block" id="mockupLogoCircle"></div>
+                        <span class="text-sm font-bold tracking-tight text-white" id="mockupLogoText">SyncFlow</span>
+                    </div>
+                    <nav class="space-x-3 text-xs text-slate-400 font-medium">
+                        <span class="hover:text-white cursor-pointer">Platform</span>
+                        <span class="hover:text-white cursor-pointer">Specs</span>
+                    </nav>
+                </div>
+
+                <div class="space-y-4 py-4">
+                    <span id="mockupBadge" class="inline-block text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full border">
+                        REVOLUTIONARY SAAS
+                    </span>
+                    <h1 id="previewHeading" class="text-2xl lg:text-3xl font-extrabold leading-tight text-white tracking-tight">
+                        Design products with unified design tokens.
+                    </h1>
+                    <p id="previewBody" class="text-xs lg:text-sm text-slate-400 leading-relaxed max-w-md">
+                        Eliminate communication overhead. Bring standard functional color wheel palettes directly together with dynamic premium Google Fonts styling to deployment-ready codes.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap gap-2.5 items-center">
+                    <button id="previewButtonPrimary" class="px-5 py-2.5 rounded-lg text-xs font-bold shadow-md transition-all min-h-[38px]">
+                        Initialize Free Sync
+                    </button>
+                    <button id="previewButtonSecondary" class="px-5 py-2.5 rounded-lg text-xs font-bold border transition-all min-h-[38px]">
+                        Documentation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Styled Layout 2: Clean Executive Dashboard -->
+            <div id="mockupLayout2" class="p-5 lg:p-6 bg-slate-950 transition-colors duration-300 hidden">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-900">
+                    <div>
+                        <span class="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">ADMIN PLATFORM</span>
+                        <span class="text-xs font-bold text-slate-200" id="previewDashTitle">Marketing Campaign Dashboard</span>
+                    </div>
+                    <i class="fa-solid fa-ellipsis-vertical text-slate-400"></i>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2.5 mb-4">
+                    <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                        <span class="text-[9px] font-bold text-slate-500 block">CLICK-THROUGHS</span>
+                        <span class="text-md font-extrabold text-white" id="previewMetric1">12,482</span>
+                        <span class="text-[9px] text-green-400 block mt-0.5"><i class="fa-solid fa-arrow-up mr-0.5"></i> 14.2%</span>
+                    </div>
+                    <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                        <span class="text-[9px] font-bold text-slate-500 block">ACQUISITION COST</span>
+                        <span class="text-md font-extrabold text-white" id="previewMetric2">$0.45</span>
+                        <span class="text-[9px] text-red-400 block mt-0.5"><i class="fa-solid fa-arrow-down mr-0.5"></i> 3.8%</span>
+                    </div>
+                    <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+                        <span class="text-[9px] font-bold text-slate-500 block">BOUNCE RATE</span>
+                        <span class="text-md font-extrabold text-white" id="previewMetric3">24.1%</span>
+                        <span class="text-[9px] text-slate-400 block mt-0.5">Stable</span>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-lg bg-slate-900 border border-slate-800 space-y-3">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Visual Design Assessment</span>
+                    <p id="previewVibeBody" class="text-[11px] text-slate-400 leading-relaxed italic">
+                        The visual palette harmony balances high-contrast interactive links against smooth content frames. Update variables using spacebar synchronization.
+                    </p>
+                    <div class="flex items-center space-x-1.5 pt-1">
+                        <span id="colorDot0" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                        <span id="colorDot1" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                        <span id="colorDot2" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                        <span id="colorDot3" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                        <span id="colorDot4" class="w-3.5 h-3.5 rounded-full inline-block"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST NOTIFICATION STACK -->
-    <div id="toastContainer" class="fixed bottom-20 md:bottom-6 left-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+    <div id="toastContainer" class="fixed bottom-20 lg:bottom-6 left-6 z-50 flex flex-col space-y-2 pointer-events-none"></div>
 
     <!-- Application Script Logic -->
     <script>
@@ -729,6 +747,7 @@
             updateGlobalWorkspaceStyles();
             setupEventListeners();
             initSwipeGestures();
+            initDragAndDrop();
             initializeSidebarResponsiveness();
         };
 
@@ -767,10 +786,10 @@
             link.href = `https://fonts.googleapis.com/css2?family=${hUrl}:wght@400;700;800;900&family=${bUrl}:wght@300;400;500;600&display=swap`;
         }
 
-        // Initialize responsive drawer class configuration
+        // Initialize responsive drawer class configuration (Adapts on screen dimensions < 1024px)
         function initializeSidebarResponsiveness() {
             const sidebar = document.getElementById('sidebarPanel');
-            if (window.innerWidth < 768) {
+            if (window.innerWidth < 1024) {
                 sidebar.classList.add('-translate-x-full');
                 sidebar.classList.remove('translate-x-0');
                 document.getElementById('sidebarToggleText').innerText = "Open Sidebar";
@@ -798,6 +817,74 @@
                     showToast("Swiped to cycle design tokens!");
                 }
             }, { passive: true });
+        }
+
+        // Lightweight, self-contained HTML5 Drag & Drop reordering logic
+        let dragSrcIndex = null;
+
+        function initDragAndDrop() {
+            const columns = document.querySelectorAll('.color-column');
+            columns.forEach(col => {
+                col.addEventListener('dragstart', handleDragStart);
+                col.addEventListener('dragover', handleDragOver);
+                col.addEventListener('dragleave', handleDragLeave);
+                col.addEventListener('drop', handleDrop);
+                col.addEventListener('dragend', handleDragEnd);
+            });
+        }
+
+        function handleDragStart(e) {
+            // Prevent drag events when users interact directly with inputs, buttons, or color card sliders
+            if (e.target.closest('input') || e.target.closest('button') || e.target.closest('select') || e.target.closest('.color-pill')) {
+                e.preventDefault();
+                return;
+            }
+            dragSrcIndex = parseInt(this.id.replace('col-', ''));
+            e.dataTransfer.effectAllowed = 'move';
+            this.style.opacity = '0.4';
+            this.style.transform = 'scale(0.98)';
+        }
+
+        function handleDragOver(e) {
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.dataTransfer.dropEffect = 'move';
+            this.classList.add('border-t-4', 'border-indigo-500'); // Dynamic indicator border on hover destination
+            return false;
+        }
+
+        function handleDragLeave(e) {
+            this.classList.remove('border-t-4', 'border-indigo-500');
+        }
+
+        function handleDrop(e) {
+            e.stopPropagation();
+            this.classList.remove('border-t-4', 'border-indigo-500');
+            if (dragSrcIndex !== null) {
+                const dragDestIndex = parseInt(this.id.replace('col-', ''));
+                if (dragSrcIndex !== dragDestIndex) {
+                    // Reorder local color state arrays
+                    const movedColor = colors[dragSrcIndex];
+                    colors.splice(dragSrcIndex, 1);
+                    colors.splice(dragDestIndex, 0, movedColor);
+                    updateGlobalWorkspaceStyles();
+                    showToast(`Moved column to Slot ${dragDestIndex + 1}`);
+                }
+            }
+            return false;
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+            this.style.transform = 'none';
+            const columns = document.querySelectorAll('.color-column');
+            columns.forEach(col => {
+                col.classList.remove('border-t-4', 'border-indigo-500');
+                col.style.opacity = '1';
+                col.style.transform = 'none';
+            });
+            dragSrcIndex = null;
         }
 
         // EVENT LISTENERS REGISTER
@@ -861,6 +948,13 @@
             // Sidebars and drawers
             document.getElementById('btnOpenAiAssistant').addEventListener('click', toggleAiDrawer);
 
+            // Close visual preview modal when clicking the blurred dark backdrop overlay area
+            document.getElementById('visualPreviewModalContainer').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    togglePreviewModal(false);
+                }
+            });
+
             // AI Action Button Trigger Setup wrapped in arrow scopes to isolate click Event objects
             document.getElementById('btnGenerateAI').addEventListener('click', () => triggerAiBrandGeneration(false));
 
@@ -875,7 +969,7 @@
             window.addEventListener('resize', function() {
                 const sidebar = document.getElementById('sidebarPanel');
                 const scrim = document.getElementById('sidebarScrim');
-                if (window.innerWidth >= 768) {
+                if (window.innerWidth >= 1024) {
                     sidebar.classList.remove('-translate-x-full');
                     sidebar.classList.add('translate-x-0');
                     if(scrim) scrim.classList.add('hidden');
@@ -1229,13 +1323,16 @@
 
         // REAL TIME INTERACTIVE MOCKUP TOGGLE
         function togglePreviewModal(forceState) {
-            const modal = document.getElementById('visualPreviewModal');
+            const container = document.getElementById('visualPreviewModalContainer');
             if (forceState !== undefined) {
-                if (forceState) modal.classList.remove('hidden');
-                else modal.classList.add('hidden');
+                if (forceState) {
+                    container.classList.remove('hidden');
+                } else {
+                    container.classList.add('hidden');
+                }
                 return;
             }
-            modal.classList.toggle('hidden');
+            container.classList.toggle('hidden');
         }
 
         // Swaps dashboard formats
@@ -1347,7 +1444,7 @@
                 // Open Sidebar
                 sidebar.classList.remove('-translate-x-full', 'hidden');
                 sidebar.classList.add('translate-x-0', 'fixed');
-                if (window.innerWidth < 768) {
+                if (window.innerWidth < 1024) {
                     scrim.classList.remove('hidden');
                     scrim.classList.add('opacity-100');
                 }
